@@ -2,16 +2,17 @@ package com.example.ActivEdgeSoftwareDeveloperExercise.exercise3.controllers;
 
 import com.example.ActivEdgeSoftwareDeveloperExercise.exercise3.dtos.APIResponse;
 import com.example.ActivEdgeSoftwareDeveloperExercise.exercise3.dtos.StockRequestDto;
+import com.example.ActivEdgeSoftwareDeveloperExercise.exercise3.models.Stock;
 import com.example.ActivEdgeSoftwareDeveloperExercise.exercise3.services.StockService;
+import com.example.ActivEdgeSoftwareDeveloperExercise.exercise3.utils.Constants;
 import com.example.ActivEdgeSoftwareDeveloperExercise.exercise3.utils.Responder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/stocks/")
+@RequestMapping("/api/stocks")
 @RestController
 @RequiredArgsConstructor
 public class StockController {
@@ -19,8 +20,26 @@ public class StockController {
     private final Responder responder;
 
     @PostMapping
-    public ResponseEntity<APIResponse> addAddressBook(@RequestBody StockRequestDto requestDto){
+    public ResponseEntity<APIResponse> createStock(@RequestBody StockRequestDto requestDto){
         return responder.okay(service.createStock(requestDto));
+    }
+
+    @GetMapping("/{stockId}")
+    public ResponseEntity<APIResponse> getStock(@PathVariable Long stockId){
+        return  responder.okay(service.getStock(stockId));
+    }
+
+    @GetMapping("/getStocks")
+    public ResponseEntity<Page<Stock>> getStocks(@RequestParam(defaultValue = Constants.PAGENO) Integer pageNo,
+                                                       @RequestParam(defaultValue = Constants.PAGESIZE) Integer pageSize,
+                                                       @RequestParam(defaultValue = "id") String sortBy) {
+        Page<Stock> pagedResult = service.getAllStocks(pageNo, pageSize, sortBy);
+
+        if(pagedResult.hasContent()) {
+            return new ResponseEntity<>(pagedResult, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

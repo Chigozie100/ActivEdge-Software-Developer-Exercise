@@ -7,7 +7,12 @@ import com.example.ActivEdgeSoftwareDeveloperExercise.exercise3.models.Stock;
 import com.example.ActivEdgeSoftwareDeveloperExercise.exercise3.repositories.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +27,18 @@ public class StockServiceImpl implements StockService{
         });
         Stock stock = modelMapper.map(requestDto, Stock.class);
         return modelMapper.map(repository.save(stock), StockResponseDto.class);
+    }
+
+    @Override
+    public StockResponseDto getStock(Long stockId) {
+        Optional<Stock> getStock = repository.findById(stockId);
+        return modelMapper.map(getStock, StockResponseDto.class);
+    }
+
+    @Override
+    public Page<Stock> getAllStocks(int pageNo, int pageSize, String sortBy) {
+        PageRequest paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return repository.findAll(paging);
     }
 
 }

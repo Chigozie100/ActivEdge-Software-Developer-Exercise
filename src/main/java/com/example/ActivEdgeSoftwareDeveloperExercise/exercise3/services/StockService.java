@@ -8,9 +8,9 @@ import org.springframework.data.domain.Page;
 public interface StockService {
     StockResponseDto createStock(StockRequestDto requestDto);
 
-//    StockResponseDto getStock(Long stockId);
-//
-//    Page<Stock> getAllStocks(int pageNo, int pageSize, String sortBy);
-//
+    StockResponseDto getStock(Long stockId);
+
+    Page<Stock> getAllStocks(int pageNo, int pageSize, String sortBy);
+
 //    StockResponseDto updateStock(Long stockId, StockRequestDto requestDto);
 }
