@@ -12,5 +12,5 @@ public interface StockService {
 
     Page<Stock> getAllStocks(int pageNo, int pageSize, String sortBy);
 
-//    StockResponseDto updateStock(Long stockId, StockRequestDto requestDto);
+    StockResponseDto updateStock(Long stockId, StockRequestDto requestDto);
 }

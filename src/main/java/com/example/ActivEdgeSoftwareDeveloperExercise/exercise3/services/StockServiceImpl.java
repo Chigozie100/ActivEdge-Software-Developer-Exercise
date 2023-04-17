@@ -41,4 +41,12 @@ public class StockServiceImpl implements StockService{
         return repository.findAll(paging);
     }
 
+    @Override
+    public StockResponseDto updateStock(Long stockId, StockRequestDto requestDto) {
+        Stock stock = repository.findById(stockId).orElseThrow(()-> new ResourceNotFoundException("stock not found"));
+        stock.setCurrentPrice(requestDto.getCurrentPrice());
+        Stock save = repository.save(stock);
+        return modelMapper.map(save, StockResponseDto.class);
+    }
+
 }

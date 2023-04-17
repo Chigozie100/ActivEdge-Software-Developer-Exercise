@@ -42,4 +42,10 @@ public class StockController {
         }
     }
 
+    @PutMapping("/{stockId}")
+    public ResponseEntity<APIResponse> updateStock(@PathVariable(name = "stockId") Long stockId,
+                                                         @RequestBody StockRequestDto requestDto){
+        return responder.okay(service.updateStock(stockId, requestDto));
+    }
+
 }
